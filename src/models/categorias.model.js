@@ -1,13 +1,13 @@
 import pool from "../config/db.js";
 
-const categoriaModel = {
-    cadastrarCategoria: async (categorias) => {
+const categoriasModel = {
+    cadastrarCategoria: async (categoria) => {
         const sql = `
             INSERT INTO categorias
-            (descricaoCategoria, dataCad)
-            VALUES (?, ?)
+            (descricaoCategoria) -- dataCad omitida se for DEFAULT no banco
+            VALUES (?)
         `;
-        const values = [categorias.descricaoCategoria, new Date()];
+        const values = [categoria.descricaoCategoria];
         const [rows] = await pool.execute(sql, values);
         return rows;
     },
@@ -21,7 +21,7 @@ const categoriaModel = {
     buscarCategoriaPorId: async (idCategoria) => {
         const sql = "SELECT * FROM categorias WHERE idCategoria = ?";
         const [rows] = await pool.execute(sql, [idCategoria]);
-        return rows;
+        return rows[0]; 
     },
 
     atualizarCategoria: async (idCategoria, descricaoCategoria) => {
@@ -41,4 +41,4 @@ const categoriaModel = {
     }
 };
 
-export default categoriaModel;
+export default categoriasModel;
